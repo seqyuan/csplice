@@ -54,7 +54,10 @@ Options:
 Options:
   -b, --bam TEXT         Input BAM file path  [required]
   -o, --outdir TEXT      Output directory  [required]
-  -g, --gene_bed TEXT    Gene BED file path  [required]
+  -g, --genebed TEXT     Gene BED file path  [required]
+  -i, --introned TEXT    Intron BED file path  [required]
+  -c, --cb TEXT          Cell barcode tag (default: CB)
+  -u, --ub TEXT          UMI tag (default: UB)
   --help                 Show this message and exit.
 ```
 
