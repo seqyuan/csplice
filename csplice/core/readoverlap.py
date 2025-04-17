@@ -94,13 +94,18 @@ def read_overlap(read: pysam.AlignedSegment, gene: pd.DataFrame, intron: pd.Data
     
     if gene_id is None:
         return None, None, None
+    
     intron = intron[intron['gene_id'].isin(gene_id_names['gene_id_'])]
     intron_ol = bf.overlap(r_df, intron, return_overlap=True)
-    intron_ol = intron_ol[intron_ol['gene_id_'] != None]
+    intron_ol = intron_ol[intron_ol['gene_id_'].notna()]
+    if intron_ol.shape[0] == 0:
+        return gene_id, gene_name, splice
+    
     intron_ol['overlap_len'] = intron_ol['overlap_end'] - intron_ol['overlap_start'] 
     
     if intron_ol.shape[0] == 1:
-        if intron_ol['overlap_len'].head(1).values[0] > 10:
+        overlap_len = intron_ol['overlap_len'].values[0]
+        if pd.notna(overlap_len) and overlap_len > 10:
             splice = 'unsplice'
             gene_id = intron_ol.iloc[0, 7]
             gene_name = gene_id_names.loc[gene_id, "gene_name_"]
@@ -109,7 +114,7 @@ def read_overlap(read: pysam.AlignedSegment, gene: pd.DataFrame, intron: pd.Data
         splice = 'unsplice'
         intron_ol['overlap_len'] = intron_ol['overlap_end'] - intron_ol['overlap_start']
         tmp = intron_ol.groupby(['gene_id_']).sum().sort_values(['overlap_len'], ascending=False).reset_index().loc[0,:] 
-        if tmp['overlap_len'] > 10:
+        if pd.notna(tmp['overlap_len']) and tmp['overlap_len'] > 10:
             splice = 'unsplice'
             gene_id = tmp['gene_id_']
             gene_name = gene_id_names.loc[gene_id, "gene_name_"]
