@@ -75,7 +75,7 @@ def bam_to_gene(bam: str, outdir: str, genebed: str, introned: str, lib: str, cb
             read_count += 1
             if read_count % 10000 == 0:
                 print(f"Processed {read_count} reads")
-            gene_id, gene_name, splice = read_overlap_gene(read, gene, intron)
+            gene_id, gene_name, splice = read_overlap(read, gene, intron)
             if gene_id is None:
                 continue
             
