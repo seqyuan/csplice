@@ -56,7 +56,7 @@ def gtf_to_bed(gtf: str, outdir: str, gene_id: str, gene_name: str, transcript_i
               help="UMI tag ((10X mobidrop should be UB")
 
     
-def bam_to_gene(bam: str, outdir: str, genebed: str, introned: str, lib: str, cb: str = None, ub: str = None) -> None:
+def bam_to_gene(bam: str, outdir: str, genebed: str, introned: str, cb: str = None, ub: str = None) -> None:
     """Process bam to gene expression."""
     # Set default values based on library type
     os.makedirs(f"{outdir}", exist_ok=True)
@@ -75,9 +75,10 @@ def bam_to_gene(bam: str, outdir: str, genebed: str, introned: str, lib: str, cb
             read_count += 1
             if read_count % 10000 == 0:
                 print(f"Processed {read_count} reads")
-            gene_id, gene_name, splice = read_overlap(read, gene, intron)
-            if gene_id is None:
+            result = read_overlap(read, gene, intron)
+            if result[0] is None:  # Check if gene_id is None
                 continue
+            gene_id, gene_name, splice = result
             
             if read.has_tag(cb):
                 cell_barcode = read.get_tag(cb)

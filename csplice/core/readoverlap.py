@@ -1,5 +1,6 @@
 import pysam
 import pandas as pd
+import bioframe as bf
 
 def get_alignment_intervals(read):
     """
@@ -92,7 +93,7 @@ def read_overlap(read: pysam.AlignedSegment, gene: pd.DataFrame, intron: pd.Data
     splice = 'splice'
     
     if gene_id is None:
-        return
+        return None, None, None
     intron = intron[intron['gene_id'].isin(gene_id_names['gene_id_'])]
     intron_ol = bf.overlap(r_df, intron, return_overlap=True)
     intron_ol = intron_ol[intron_ol['gene_id_'] != None]
@@ -116,4 +117,3 @@ def read_overlap(read: pysam.AlignedSegment, gene: pd.DataFrame, intron: pd.Data
         pass
     
     return gene_id, gene_name, splice
-
