@@ -5,10 +5,10 @@ Genomic data processing toolkit for converting GTF to BED format and analyzing B
 ## Installation
 
 ```bash
-# Install using poetry
-poetry install
+# Install from PyPI
+pip install csplice
 
-# Or install directly
+# Or install from source
 pip install .
 ```
 
